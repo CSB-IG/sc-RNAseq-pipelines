@@ -26,7 +26,7 @@ Desarrollar pipelines óptimos de análisis de single-cell RNA-seq en R, Python 
 ## ** ¿Cómo contribuir?**
 1. **Clona el repositorio**
    ```bash
-   git clone https://github.com/tu-usuario/scRNAseq-hackathon.git
+   git clone https://github.com/CSB-IG/sc-RNAseq-pipelines.git
    ```
 2. **Crea una rama para tu contribución**
    ```bash
