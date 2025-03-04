@@ -38,12 +38,24 @@ Desarrollar pipelines óptimos de análisis de single-cell RNA-seq en R, Python 
    git commit -m "Descripción clara del cambio"
    git push origin feature-nueva
    ```
+   
+** Crear el Pull Request en GitHub **
+Después de hacer git push, abre tu navegador y sigue estos pasos:
+
+- Ve a tu repositorio en GitHub.
+- Aparecerá un mensaje sugiriendo abrir un Pull Request para la rama feature-nueva.
+- Haz clic en "Compare & pull request".
+- Escribe un título y descripción claros del cambio.
+- Asigna etiquetas (enhancement, bug, documentation).
+- Da clic en "Create pull request".
+
+   
 4. **Espera revisión y aprobación** 
 
 ---
 
-## **📌 Milestones e Issues**
-### 🔹 **Fases del Hackatón**
+## **Milestones e Issues**
+###  **Fases del Hackatón**
 ✅ **Set-up inicial**: Configuración del repositorio y datos de prueba.
 ✅ **Implementación del pipeline**: Desarrollo en R, Python y versión híbrida.
 ✅ **Pruebas y optimización**: Evaluación de performance y validaciones.
@@ -64,7 +76,7 @@ Desarrollar pipelines óptimos de análisis de single-cell RNA-seq en R, Python 
 
 ---
 
-## **📖 Documentación y Tutorial**
+## **Documentación y Tutorial**
 Cada pipeline tendrá:
 - Documentación clara en `docs/`
 - Notebooks de ejemplo (`tutorial.ipynb` en Python, `tutorial.Rmd` en R)
@@ -72,7 +84,7 @@ Cada pipeline tendrá:
 
 ---
 
-## **📊 Evaluación de Rendimiento**
+## **Evaluación de Rendimiento**
 Cada implementación será evaluada en:
 - **Tiempo de ejecución** (segundos)
 - **Consumo de memoria RAM** (MB)
