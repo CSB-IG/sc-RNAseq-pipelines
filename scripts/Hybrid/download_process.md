@@ -8,7 +8,7 @@
     <code>./download.sh </code> </li>
     <li>Find your files in data directory</li> 
     
-    <ol>
+</ol>
 
 
 ## download.sh pseudocode
