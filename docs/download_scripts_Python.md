@@ -5,7 +5,7 @@
     <li>Import conda environment</br> 
     <code>conda env create -f environment.yml</code></li>
     <li>Modify the csv file with the urls, hash types and checksums necessary for your download</br> 
-    <code>conda activate hackaton-sc-python</code></li>
+    <code>conda activate hackaton-sc</code></li>
     <li>Run script </br> 
     <code>python download_scripts.py </code> </li>
     <li>Find your files in data directory</li> 
