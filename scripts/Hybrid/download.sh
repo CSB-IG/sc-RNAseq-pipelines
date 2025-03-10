@@ -5,9 +5,7 @@ verify_checksum() {
     local filename="$1"
     local expected_checksum="$2"
     local hash_type="$3"
-    echo "filename: $filename"
-    echo "checksum: $expected_checksum"
-    echo "hash: $hash_type"
+
 
     if [[ ! -f "$filename" ]]; then
         echo "File $filename not found, skipping checksum verification."
