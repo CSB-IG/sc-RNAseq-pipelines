@@ -37,7 +37,7 @@ The script <i>download_script.py</i> does the following steps: </br>
     <li><i>file_path (string)</i>: Path of the directory in which the downloaded file is located</li>
     <li><i>hash_type (string [SHA256, SHA1, MD5])</i>: Type of hashing needed to check file's integrity</li>
 </ul> 
-**OUTPUT** </br>
+<b>OUTPUT</b> </br>
 <ul>
     <li><i>hash_func().hexdigest (string)</i>: String of checksum to compare with website's checksum and verify if file is intact.</li>
     <li><i>None</i>: It returns None when the hash_type is not supported, you can modify the function to include the desired hash_type</li>
@@ -52,7 +52,7 @@ The script <i>download_script.py</i> does the following steps: </br>
     <li><i>expected_checksum (string)</i>: Set of characters obtained from the website to check for file's integrity (need to input checksum and hash in urls.csv)</li>
 
 </ul> 
-**OUTPUT** </br>
+<b>OUTPUT</b> </br>
 <ul>
     <li><i>bool</i>: True if checksum match, false if it doesn't match.</li>
 </ul> 
@@ -65,7 +65,7 @@ The script <i>download_script.py</i> does the following steps: </br>
     <li><i>dir_path (string)</i>: Directory in which all the extracted files will be saved</li>
 
 </ul> 
-**OUTPUT** </br>
+<b>OUTPUT</b> </br>
 <ul>
     <li><i>None</i></li>
 </ul> 
@@ -79,7 +79,7 @@ The script <i>download_script.py</i> does the following steps: </br>
     <li><i>dir_path (string)</i>: Directory in which all the extracted files will be saved</li>
 
 </ul> 
-**OUTPUT** </br>
+<b>OUTPUT</b> </br>
 <ul>
     <li><i>None</i></li>
 </ul> 
