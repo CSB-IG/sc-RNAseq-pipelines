@@ -1,60 +1,39 @@
-library(Seurat)
-library(dplyr)
-library(ggplot2)
-library(patchwork)
-library(Matrix)
-library(data.table)
-library(stringr)
-library(cowplot)
-library(ggpubr)
+if (!requireNamespace("pacman", quietly = TRUE)) install.packages("pacman")
+pacman::p_load(Seurat, dplyr, ggplot2, patchwork, Matrix, data.table, stringr, cowplot, ggpubr)
 
-# List filtered .h5 files
-data_files <- list.files("../clean_adata/", pattern = "filtered.h5$")
+# Set the working directory
+setwd("~/Prueba_Get_Data/")
 
-data_files
+# Download and extract data
+system("wget https://cf.10xgenomics.com/samples/cell-exp/1.1.0/aml035_pre_transplant/aml035_pre_transplant_raw_gene_bc_matrices.tar.gz")
+system("tar -xvzf aml035_pre_transplant_raw_gene_bc_matrices.tar.gz")
 
-# Function to load data
-load_it <- function(file) {
-  samp <- strsplit(file, "_")[[1]][1]  # Extract patient/sample identifier
-  dx <- strsplit(file, "_")[[1]][2]  # Extract diagnosis code
-  seurat_obj <- Read10X_h5(paste0("../clean_adata/", file)) %>%
-    CreateSeuratObject()  # Load the dataset and create a Seurat object
-  seurat_obj$Patient <- samp  # Assign patient ID
-  seurat_obj$DX <- dx  # Assign diagnosis code
-  seurat_obj$Sample <- paste0(samp, "_", dx)  # Create a unique sample identifier
-  seurat_obj <- RenameCells(seurat_obj, add.cell.id = paste0(samp, "_", dx))  # Rename cells for uniqueness
-  return(seurat_obj)
-}
+# Load extracted count matrix
+gene_matrix <- readMM("matrices_mex/hg19/matrix.mtx")
+gene_names <- fread("matrices_mex/hg19/genes.tsv", header = FALSE)
+barcode_names <- fread("matrices_mex/hg19/barcodes.tsv", header = FALSE)
 
-# Load data from all files
-datasets <- lapply(data_files, load_it)
+# Ensure unique row names
+gene_names$V2 <- make.unique(gene_names$V2)
 
-# Quality control function
-qc <- function(seurat_obj) {
-  seurat_obj <- subset(seurat_obj, subset = nFeature_RNA > 200)  # Filter out low-quality cells
-  seurat_obj <- NormalizeData(seurat_obj, normalization.method = "LogNormalize", scale.factor = 10000)  # Normalize expression data
-  return(seurat_obj)
-}
+# Assign row and column names
+rownames(gene_matrix) <- gene_names$V2
+colnames(gene_matrix) <- barcode_names$V1
 
-# Apply QC to all datasets
-datasets <- lapply(datasets, qc)
+# Create Seurat object
+seurat_obj <- CreateSeuratObject(counts = gene_matrix)
 
-# Merge all datasets into a single Seurat object
-seurat_combined <- merge(datasets[[1]], y = datasets[-1])
+# Normalize and process data
+seurat_obj <- NormalizeData(seurat_obj, normalization.method = "LogNormalize", scale.factor = 10000)
+seurat_obj <- FindVariableFeatures(seurat_obj, selection.method = "vst", nfeatures = 2000)
+seurat_obj <- ScaleData(seurat_obj)
+seurat_obj <- RunPCA(seurat_obj)
+seurat_obj <- RunUMAP(seurat_obj, dims = 1:10)
 
-# Identify mitochondrial gene percentage
-seurat_combined["percent.mt"] <- PercentageFeatureSet(seurat_combined, pattern = "^MT-")
-
-# Filter out cells with high mitochondrial content
-seurat_combined <- subset(seurat_combined, subset = percent.mt < 25)
-
-# Identify and remove doublets
-seurat_combined <- SCTransform(seurat_combined)  # Normalize using SCTransform
-seurat_combined <- RunPCA(seurat_combined)  # Perform PCA for dimensionality reduction
-seurat_combined <- RunUMAP(seurat_combined, dims = 1:10)  # Perform UMAP for visualization
-
-# Save final Seurat object
-saveRDS(seurat_combined, file = "~/doublets_removed.rds")
+# Save processed Seurat object
+saveRDS(seurat_obj, file = "~/Prueba_Get_Data/processed_seurat_obj.rds")
 
 # Save filtered count matrix
-writeMM(seurat_combined@assays$RNA@counts, file = "~/filtered_counts.mtx")
+writeMM(seurat_obj@assays$RNA@counts, file = "~/Prueba_Get_Data/filtered_matrix.mtx")
+write.table(rownames(seurat_obj), file = "~/Prueba_Get_Data/filtered_genes.tsv", quote = FALSE, row.names = FALSE, col.names = FALSE)
+write.table(colnames(seurat_obj), file = "~/Prueba_Get_Data/filtered_barcodes.tsv", quote = FALSE, row.names = FALSE, col.names = FALSE)
